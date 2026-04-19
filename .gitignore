@@ -47,11 +47,7 @@ bin/
 obj/
 
 # VS Code
-.vscode/*.json
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/c_cpp_properties.json
+.vscode/
 
 # 操作系统文件
 .DS_Store

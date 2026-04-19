@@ -1,10 +1,8 @@
 #include <iostream>
-#include "Counter.h"
+#include "SeqList.h"
 
 int main() {
-    Counter counter;
-    counter.increment();
-    counter.increment();
-    std::cout << counter.getValue() << std::endl;
+    SeqList seqList;
+    std::cout << seqList.getSize() << std::endl;
     return 0;
 }
