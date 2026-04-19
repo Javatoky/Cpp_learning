@@ -1,0 +1,65 @@
+# C++ 编译产物
+*.exe
+*.obj
+*.o
+*.ilk
+*.ipdb
+*.lib
+*.dll
+*.pdb
+*.exp
+*.manifest
+*.exe.manifest
+
+# 中间文件
+*.tlog
+*.lastbuildstate
+*.msi
+*.msm
+*.ism
+*.aps
+*.ncb
+*.suo
+*.user
+*.aps
+*.idb
+*.rar
+*.Tmp
+*.sdf
+*.db
+*.log
+*.dll.config
+
+# Visual Studio
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+[Oo]utput/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bin/
+obj/
+
+# VS Code
+.vscode/*.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/c_cpp_properties.json
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*~
