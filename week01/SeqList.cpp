@@ -1,4 +1,3 @@
-#include <iostream>
 #include "SeqList.h"
 
 SeqList::SeqList(): data(nullptr), size(0), capacity(0){
@@ -41,26 +40,6 @@ int SeqList::getSize() const{
     return size;
 }
 
-void SeqList::allocate(int cap){
-    if(data != nullptr){
-        delete[] data;
-    }
-    data = new int[cap];
-    capacity = cap;
-    size = 0; 
-}
-
-void SeqList::setFirst(int value){
-    if (capacity > 0) {
-        data[0] = value;
-        size = 1;
-    }
-}
-
-int SeqList::getFirst() const{
-    return data[0];
-}
-
 void SeqList::expand() {
     int newCapacity;
     if (capacity == 0) {
@@ -94,4 +73,8 @@ int SeqList::get(int index) const {
         return -404;    // 模拟错误处理
     }
     return data[index];
+}
+
+bool SeqList::isEmpty() const {
+    return size == 0;
 }

@@ -15,12 +15,10 @@ public:
     SeqList& operator=(const SeqList& other);
     ~SeqList();
 
-    void allocate(int cap);
     int getSize() const;
-    void setFirst(int value);
-    int getFirst() const;
     void pushBack(int value);
     int get(int index) const;
+    bool isEmpty() const;
 };
 
 #endif
