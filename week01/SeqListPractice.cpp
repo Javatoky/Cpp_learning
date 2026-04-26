@@ -1,4 +1,4 @@
-#include "SeqList.h"
+#include "SeqListPractice.h"
 
 SeqList::SeqList(): data(nullptr), size(0), capacity(0){
 }
@@ -78,3 +78,5 @@ int SeqList::get(int index) const {
 bool SeqList::isEmpty() const {
     return size == 0;
 }
+
+//引用是编译器的障眼法：它用一块你看不见的内存存了一个地址，然后让你觉得你在直接操作原变量；当你问它“你的地址是啥”时，它悄悄把那块内存里存的地址读数告诉你，让你永远不知道它自己的家门牌号。
