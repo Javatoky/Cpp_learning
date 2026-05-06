@@ -100,4 +100,48 @@ int main() {
     std::cout << list1.find(5) << std::endl;
     std::cout << "Find not existent element: (expect '-1')" << std::endl;
     std::cout << list1.find(250) << std::endl;
+    std::cout << "\n" << std::endl;
+
+    std::cout << "Test copy construction: " << std::endl;
+    LinkedList a;
+    a.pushBack(1);
+    a.pushBack(2);
+    a.pushBack(3);
+    std::cout << "All values of the linked list 'a' before copied by 'b': " << std::endl;
+    printAllValue(a);
+    LinkedList b(a);
+    a.pushBack(7);
+    a.removeAt(1);
+    std::cout << "Now, all values of 'a': (expect '1' '3' '7')" << std::endl;
+    printAllValue(a);
+    std::cout << "All values of 'b' which copied 'a': (expect '1' '2' '3')" << std::endl;
+    printAllValue(b);
+    std::cout << "\n" << std::endl;
+    
+    std::cout << "Test copy assignment: " << std::endl;
+    LinkedList c;
+    c.pushBack(4);
+    c.pushBack(3);
+    std::cout << "All values of 'c': (expect '4' '3')" << std::endl;
+    printAllValue(c);
+    c = a;
+    std::cout << "Now, 'c' copy assignment from 'a'." << std::endl;
+    a.clear();
+    if (a.isEmpty()) {
+        std::cout << "Now, 'a' is empty." << std::endl;
+    }
+    std::cout << "All values of 'c': (expect '1' '3' '7')" << std::endl;
+    printAllValue(c);
+    c = c;
+    std::cout << "'c' copy assignment itself: (expect '1' '3' '7')" << std::endl;
+    printAllValue(c);
+    LinkedList d;
+    std::cout << "'d' is an empty linked list, 'c' copy assignment from 'd'" << std::endl;
+    c = d;
+    std::cout << "All values of 'c': (expect 'No element in this list.')" << std::endl;
+    printAllValue(c);
+    std::cout << "'d' copy assignment from 'b'" << std::endl;
+    d = b;
+    std::cout << "All values of 'd': (expect '1' '2' '3')" << std::endl;
+    printAllValue(d);
 }

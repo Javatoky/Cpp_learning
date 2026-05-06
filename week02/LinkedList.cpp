@@ -1,6 +1,29 @@
 #include "LinkedList.h"
 
 LinkedList::LinkedList(): head(nullptr), tail(nullptr), size(0) {}
+
+LinkedList::LinkedList(const LinkedList& other): head(nullptr), tail(nullptr), size(0) {
+    Node* temp = other.head;
+    for (int i = 0; i < other.size; i++) {
+        pushBack(temp->value);
+        temp = temp->next;
+    }
+}
+
+LinkedList& LinkedList::operator=(const LinkedList& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    clear();
+    Node* temp = other.head;
+    for (int i = 0; i < other.size; i++) {
+        pushBack(temp->value);
+        temp = temp->next;
+    }
+    return *this;
+}
+
 LinkedList::~LinkedList() {
     clear();
 }
@@ -116,6 +139,6 @@ void LinkedList::clear() {
         delete temp; 
     }
 
-    head =  tail = nullptr; 
+    head = tail = nullptr; 
     size = 0;
 }
