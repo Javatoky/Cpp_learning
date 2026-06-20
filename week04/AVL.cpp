@@ -1,4 +1,5 @@
 #include "AVL.h"
+#include<iostream>
 
 AVL::Node::Node(int value): value(value), height(1), left(nullptr), right(nullptr) {}
 
@@ -6,6 +7,37 @@ AVL::AVL(): root(nullptr), size(0) {}
 
 AVL::~AVL() {
     release(root);
+}
+
+AVL::Node* AVL::cloneNode(const Node* src) {
+    if (src == nullptr) {
+        return nullptr;
+    }
+    
+    Node* pointer = new Node(src->value);
+    pointer->height = src->height;
+
+    pointer->left = cloneNode(src->left);
+    pointer->right = cloneNode(src->right);
+
+    return pointer;
+}
+
+AVL::AVL(const AVL& other): root(nullptr), size(0) {
+    root = cloneNode(other.root);
+    size = other.size;
+}
+
+AVL& AVL::operator=(const AVL& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    clear();
+    root = cloneNode(other.root);
+    size = other.size;
+
+    return *this;
 }
 
 int AVL::getHeight(const Node* pointer) const {
@@ -67,6 +99,10 @@ void AVL::rotateRight(Node*& pointer) {
     updateHeight(pointer);
 }
 
+bool AVL::isEmpty() const {
+    return size == 0;
+}
+
 bool AVL::insertIntoNode(Node*& pointer, int value) {
     if (pointer == nullptr) {
         pointer = new Node(value);
@@ -120,6 +156,30 @@ bool AVL::insert(int value) {
     return false;
 }
 
+void AVL::preOrderVisitNode(const Node* pointer, int* arr, int& index) const {
+    if (pointer == nullptr) {
+        return;
+    }
+
+    arr[index++] = pointer->value;
+    preOrderVisitNode(pointer->left, arr, index);
+    preOrderVisitNode(pointer->right, arr, index);
+}
+
+int* AVL::preOrder(int& length) const {
+    if (size == 0) {
+        length = 0;
+        return nullptr;
+    }
+
+    int* arr = new int[size];
+    int index = 0;
+    preOrderVisitNode(root, arr, index);
+
+    length = size;
+    return arr;
+}
+
 void AVL::inOrderVisitNode(const Node* pointer, int* arr, int& index) const {
     if (pointer == nullptr) {
         return;
@@ -139,6 +199,30 @@ int* AVL::inOrder(int& length) const {
     int* arr = new int[size];
     int index = 0;
     inOrderVisitNode(root, arr, index);
+
+    length = size;
+    return arr;
+}
+
+void AVL::postOrderVisitNode(const Node* pointer, int* arr, int& index) const {
+    if (pointer == nullptr) {
+        return;
+    }
+
+    postOrderVisitNode(pointer->left, arr, index);
+    postOrderVisitNode(pointer->right, arr, index);
+    arr[index++] = pointer->value;
+}
+
+int* AVL::postOrder(int& length) const {
+    if (size == 0) {
+        length = 0;
+        return nullptr;
+    }
+
+    int* arr = new int[size];
+    int index = 0;
+    postOrderVisitNode(root, arr, index);
 
     length = size;
     return arr;
