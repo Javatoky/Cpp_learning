@@ -41,7 +41,9 @@ public:
     AVL& operator=(const AVL& other);
 
     bool isEmpty() const;                               //判断书是否为空
+    int getSize() const;                                //获取元素数量
     bool insert(int value);                             //插入指定值
+    bool contains(int value) const;                     //判断是否含有指定元素
     bool remove(int value);                             //删除指定值
     void clear();                                       //清空树中所有元素
     

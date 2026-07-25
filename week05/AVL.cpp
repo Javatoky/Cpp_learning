@@ -114,6 +114,10 @@ bool AVL::isEmpty() const {
     return size == 0;
 }
 
+int AVL::getSize() const {
+    return size;
+}
+
 void AVL::rotateAsNeeded(Node*& pointer) {
     int bf = getBalanceFactor(pointer);
     if (bf == 2) {
@@ -170,6 +174,21 @@ bool AVL::insert(int value) {
     if (insertIntoNode(root, value)) {
         size++;
         return true;
+    }
+
+    return false;
+}
+
+bool AVL::contains(int value) const {
+    const Node* pointer = root;
+    while (pointer != nullptr) {
+        if (value == pointer->value) {
+            return true;
+        } else if (value < pointer->value) {
+            pointer = pointer->left;
+        } else {
+            pointer = pointer->right;
+        }
     }
 
     return false;

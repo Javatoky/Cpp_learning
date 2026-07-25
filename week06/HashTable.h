@@ -14,9 +14,11 @@ private:
     int bucketCount;
     int size;
 
+    void copyFrom(const HashTable& other);
     int hashFunction(const K& key) const;
     void clearAllNode();
     void expand();
+    void checkAndExpand();
 
 public:
     HashTable();
@@ -32,6 +34,9 @@ public:
     bool contains(const K& key) const;
 
     void clear();
+
+    int getBucketCount() const;
+    bool validateSize() const;
 };
 #endif
 
@@ -51,25 +56,7 @@ template<typename K>
 HashTable<K>::HashTable(const HashTable& other): bucketCount(other.bucketCount), size(other.size) {
     data = new Node*[bucketCount];
 
-    for(int i = 0; i < bucketCount; i++) {
-        Node* pointer = other.data[i];
-        if (pointer == nullptr) {
-            continue;
-        }
-
-        Node* prior = new Node(pointer->key);
-        Node* rear = prior;
-        while (true) {
-            pointer = pointer->next;
-            if (pointer == nullptr) {
-                break;
-            }
-
-            rear->next = new Node(pointer->key);
-        }
-
-        data[i] = prior;
-    }
+    copyFrom(other);
 }
 
 template<typename K>
@@ -84,35 +71,13 @@ HashTable<K>& HashTable<K>::operator=(const HashTable& other) {
     size = other.size;
     data = new Node*[bucketCount];
 
-    if (size == 0) {
-        return *this;
-    }
-
-    for (int i = 0; i< bucketCount; i++) {
-        Node* pointer = other.data[i];
-        if (pointer == nullptr) {
-            continue;
-        }
-
-        Node* prior = new Node(pointer->key);
-        Node* rear = prior;
-        while (true) {
-            pointer = pointer->next;
-            if (pointer == nullptr) {
-                break;
-            }
-
-            rear->next = new Node(pointer->key);
-        }
-
-        data[i] = prior;
-    }
+    copyFrom(other);
 
     return *this;
 }
 
-template<typename k>
-HashTable<k>::~HashTable() {
+template<typename K>
+HashTable<K>::~HashTable() {
     clearAllNode();
     delete[] data;
 }
@@ -127,6 +92,30 @@ int HashTable<K>::hashFunction(const K& key) const {
     return index;
 }
 
+template<typename K>
+void HashTable<K>::copyFrom(const HashTable& other) {
+    for (int i = 0; i< bucketCount; i++) {
+        Node* pointer = other.data[i];
+        if (pointer == nullptr) {
+            data[i] = nullptr;
+            continue;
+        }
+
+        Node* prior = new Node(pointer->key);
+        Node* rear = prior;
+        while (true) {
+            pointer = pointer->next;
+            if (pointer == nullptr) {
+                break;
+            }
+
+            rear->next = new Node(pointer->key);
+            rear = rear->next;
+        }
+
+        data[i] = prior;
+    }
+}
 
 template<typename K>
 void HashTable<K>::clearAllNode() {
@@ -149,7 +138,7 @@ void HashTable<K>::expand() {
     bucketCount = 2 * bucketCount + 1;
     Node** newData = new Node*[bucketCount];
     for (int i = 0; i < bucketCount; i++) {
-        newdata[i] = nullptr;
+        newData[i] = nullptr;
     }
 
     for(int i = 0; i < oldBucketCount; i++) {
@@ -161,8 +150,8 @@ void HashTable<K>::expand() {
         Node* pointer = temp->next;
         while (true) {
             int index = hashFunction(temp->key);
-            Node* next = newData[i];
-            newData[i] = temp;
+            Node* next = newData[index];
+            newData[index] = temp;
             temp->next = next;
 
             if (pointer == nullptr) {
@@ -175,7 +164,15 @@ void HashTable<K>::expand() {
     }
 
     delete[] data;
-    data = newdata;
+    data = newData;
+}
+
+template<typename K>
+void HashTable<K>::checkAndExpand() {
+    double loadFactor = double(size) / double(bucketCount);
+    if (loadFactor > 0.75) {
+        expand();
+    }
 }
 
 template<typename K>
@@ -196,6 +193,8 @@ bool HashTable<K>::insert(const K& key) {
     if (data[index] == nullptr) {
         data[index] = new Node(key);
         size++;
+        checkAndExpand();
+
         return true;
     }
 
@@ -205,11 +204,7 @@ bool HashTable<K>::insert(const K& key) {
             if (pointer->next == nullptr) {
                 pointer->next = new Node(key);
                 size++;
-
-                double loadFactor = double(size) / double(bucketCount);
-                if (loadFactor > 0.75) {
-                    expand();
-                }
+                checkAndExpand();
 
                 return true;
             } else {
@@ -283,4 +278,23 @@ template<typename K>
 void HashTable<K>::clear() {
     clearAllNode();
     size = 0;
+}
+
+template<typename K>
+int HashTable<K>::getBucketCount() const {
+    return bucketCount;
+}
+
+template<typename K>
+bool HashTable<K>::validateSize() const {
+    int count = 0;
+    for (int i = 0; i < bucketCount; i++) {
+        Node* pointer = data[i]; 
+        while(pointer != nullptr) {
+            pointer = pointer->next;
+            count++;
+        }
+    }
+
+    return count == size;
 }
